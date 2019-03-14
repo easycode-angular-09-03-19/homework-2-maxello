@@ -6,6 +6,8 @@
         "outDir": "./build",
         "watch": true,
         "noEmitOnError": true,
-        "esModuleInterop": true
+        "esModuleInterop": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true
     }
 }
