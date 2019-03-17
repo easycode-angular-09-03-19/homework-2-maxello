@@ -5,18 +5,10 @@ function addItemInfoDecorator(target: Object, method: string, descriptor: Proper
     descriptor.value = function () {    
         let origResult = originalFunc.apply(this);
 
-        let resultObj = {
+        return Object.assign({
             date: new Date().toString(),
             info: `${this.name} - \$${this.price}`
-        };
-
-        for(let prop in origResult){
-            if(origResult.hasOwnProperty(prop)) {
-                resultObj[prop] = origResult[prop];
-            }
-        }
-
-        return resultObj;
+        }, origResult);
     }
 }
 
@@ -84,7 +76,7 @@ namespace USA {
 
 namespace UKRAINE {
     // News api Ukraine
-    export interface INews2 {
+    export interface INews {
         uuid: string;
         title: string;
         body: string;
@@ -93,13 +85,13 @@ namespace UKRAINE {
         imgUrl: string;
     }
 
-    export class NewsService2 {
+    export class NewsService {
         protected apiurl: string = 'https://news_api_2_url'
-        public getNews(): Promise<INews2[] | any> {
-            return new Promise<INews2[]>((resolve: (data: INews2[]) => void, reject: (err: any) => void) => {
+        public getNews(): Promise<INews[] | any> {
+            return new Promise<INews[]>((resolve: (data: INews[]) => void, reject: (err: any) => void) => {
                 fetch(`${this.apiurl}/news`)
                     .then((response) => response.json())
-                    .then((data: INews2[]) => resolve(data))
+                    .then((data: INews[]) => resolve(data))
                     .catch((err) => reject(err));
             });
         }
@@ -107,11 +99,11 @@ namespace UKRAINE {
     }
 }
 
-const newsService2 = new UKRAINE.NewsService2();
-let ukrainianNews: UKRAINE.INews2[];
+const ukrainianService = new UKRAINE.NewsService();
+let ukrainianNews: UKRAINE.INews[];
 
-newsService2.getNews()
-    .then((items: UKRAINE.INews2[]) => {
+ukrainianService.getNews()
+    .then((items: UKRAINE.INews[]) => {
         ukrainianNews = items;
     });
 
